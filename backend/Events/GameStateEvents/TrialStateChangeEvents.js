@@ -40,7 +40,7 @@ function endTrial(io, socket, mafiaGame) {
 
     const playerChosen = room.voteHandler.getTrialVotedPlayer();
 
-    if (playerChosen && playerChosen !== 'abstain Vote') {
+    if (playerChosen && playerChosen !== 'noConfidence') {
         room.getPlayerByNickname(playerChosen).isAlive = false;
     }
 
@@ -68,6 +68,6 @@ function endTrial(io, socket, mafiaGame) {
  * @param {any} socket
  * @param {MafiaGame} mafiaGame
  */
-module.exports.eventHandlersRegistration = function (io, socket, mafiaGame) {
+module.exports.eventHandlersRegistration = function(io, socket, mafiaGame) {
     startTrial(io, socket, mafiaGame);
 };

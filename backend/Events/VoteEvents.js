@@ -32,7 +32,7 @@ function voteTrial(io, socket, mafiaGame) {
         const voter = socket.player;
         const votee = voteForDTO.votingFor;
         room.voteHandler.trialVoteMap[voter.nickname] =
-            votee === 'abstain Vote' ? 'abstain Vote' : room.getPlayerByNickname(votee);
+            votee === 'noConfidence' ? 'noConfidence' : room.getPlayerByNickname(votee);
         io.in(socket.player.roomID).emit('trial-vote-update', new ListVoteDTO(room.voteHandler.trialVoteMap));
     });
 }
@@ -44,7 +44,7 @@ function voteTrial(io, socket, mafiaGame) {
  * @param {any} socket client socket connection to the server
  * @param {MafiaGame} mafiaGame: Object mirroring the real world Mafia game
  */
-module.exports = function (io, socket, mafiaGame) {
+module.exports = function(io, socket, mafiaGame) {
     voteDay(io, socket, mafiaGame);
     voteTrial(io, socket, mafiaGame);
 };

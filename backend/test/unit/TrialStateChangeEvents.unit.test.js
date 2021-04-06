@@ -46,7 +46,7 @@ describe('trial-start unit tests', () => {
             expect(trialStartDTO.timeToVote).toBe(config.trial_total_vote_time_in_milliseconds);
         });
         clientSocket.on('trial-end', (trialEndDTO) => {
-            expect(trialEndDTO.playerKilled).toBe('abstain Vote');
+            expect(trialEndDTO.playerKilled).toBe('noConfidence');
             expect(trialEndDTO.isGameOver).toBe(false);
             done();
         });
@@ -68,7 +68,7 @@ describe('trial-start unit tests', () => {
 
         MafiaGameMock.addTrialVote(playerA, playerD, roomElements.roomID); // Vote to kill off a civilian
 
-        // Register mock event handlers for the events that the backend emits - assertions for the DTOs
+        // Register mock event handlers for the events that the backend emits - assertions for the DTOs 
         clientSocket.on('trial-start', (trialStartDTO) => {
             expect(trialStartDTO.timeToVote).toBe(config.trial_total_vote_time_in_milliseconds);
         });

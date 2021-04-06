@@ -30,156 +30,169 @@ const reducer = (state, action) => {
     switch (action.type) {
         // all players are alive
         // assign roles to each player
-        case 'init': {
-            return {
-                ...state,
-                alivePlayers: [...action.alivePlayers],
-                role: action.role,
-                ...(action.checkedPlayers && {
-                    checkedPlayers: action.checkedPlayers,
-                }),
-            };
-        }
-
-        // change screen
-        // set the timer
-        // change voting state for specific roles [detective, mafia, medic]
-        case 'night-start': {
-            return {
-                ...state,
-                phase: 'night-start',
-                status: action.status,
-                dayPeriod: 'Night',
-                screen: 'core',
-                votingState: {
-                    ...state.votingState,
-                    type: 'role',
-                    votablePlayers: [...action.votablePlayers],
-                    timeToVote: action.timeToVote,
-                },
-            };
-        }
-
-        case 'show-selected': {
-            return {
-                ...state,
-                status: action.status,
-                votingState: { ...state.votingState, vote: action.votedPlayer },
-            };
-        }
-
-        // abstain your selection
-        case 'abstain': {
-            return {
-                ...state,
-                status: action.status,
-                votingState: { ...state.votingState, vote: '' },
-            };
-        }
-
-        case 'night-end': {
-            return {
-                ...state,
-                phase: 'night-end',
-                status: action.status,
-                alivePlayers: state.alivePlayers.filter((p) => p !== action.playerKilled),
-                votingState: {
-                    ...initialState.votingState,
-                },
-            };
-        }
-
-        case 'day-start': {
-            return {
-                ...state,
-                phase: 'day-start',
-                dayPeriod: 'Day',
-                dayNumber: state.dayNumber + 1,
-                status: action.status,
-                votingState: {
-                    ...state.votingState,
-                    timeToVote: action.timeToVote,
-                    type: 'discussion',
-                    votablePlayers: [...action.votablePlayers],
-                },
-            };
-        }
-
-        case 'discussion-end': {
-            return {
-                ...state,
-                phase: 'discussion-end',
-                status: action.status,
-                votingState: {
-                    ...initialState.votingState,
-                    type: 'trial',
-                    ...(action.votablePlayers.length && {
-                        votablePlayers: action.votablePlayers,
+        case 'init':
+            {
+                return {
+                    ...state,
+                    alivePlayers: [...action.alivePlayers],
+                    role: action.role,
+                    ...(action.checkedPlayers && {
+                        checkedPlayers: action.checkedPlayers,
                     }),
-                },
-            };
-        }
+                };
+            }
 
-        case 'trial-start': {
-            return {
-                ...state,
-                phase: 'trial-start',
-                status: action.status,
-                votingState: {
-                    ...state.votingState,
-                    timeToVote: action.timeToVote,
-                },
-            };
-        }
-        case 'trial-end': {
-            return {
-                ...state,
-                phase: 'trial-start',
-                status: action.status,
-                alivePlayers: state.alivePlayers.filter((p) => p !== action.playerKilled),
-                votingState: {
-                    ...initialState.votingState,
-                },
-            };
-        }
+            // change screen
+            // set the timer
+            // change voting state for specific roles [detective, mafia, medic]
+        case 'night-start':
+            {
+                return {
+                    ...state,
+                    phase: 'night-start',
+                    status: action.status,
+                    dayPeriod: 'Night',
+                    screen: 'core',
+                    votingState: {
+                        ...state.votingState,
+                        type: 'role',
+                        votablePlayers: [...action.votablePlayers],
+                        timeToVote: action.timeToVote,
+                    },
+                };
+            }
 
-        case 'game-over': {
-            return {
-                ...state,
-                phase: 'game-over',
-                screen: 'end',
-                status: `${action.winningRole} wins!`,
-                winningRole: action.winningRole,
-                winners: [...action.winners],
-            };
-        }
+        case 'show-selected':
+            {
+                return {
+                    ...state,
+                    status: action.status,
+                    votingState: {...state.votingState, vote: action.votedPlayer },
+                };
+            }
 
-        case 'vote-update': {
-            return {
-                ...state,
-                votingState: {
-                    ...state.votingState,
-                    playersWhoVoted: action.playersWhoVoted,
-                },
-            };
-        }
+            // abstain your selection
+        case 'abstain':
+            {
+                return {
+                    ...state,
+                    status: action.status,
+                    votingState: {...state.votingState, vote: '' },
+                };
+            }
 
-        case 'suspect-reveal': {
-            return {
-                ...state,
-                checkedPlayers: [...state.checkedPlayers, action.checkedPlayer],
-            };
-        }
+        case 'night-end':
+            {
+                return {
+                    ...state,
+                    phase: 'night-end',
+                    status: action.status,
+                    alivePlayers: state.alivePlayers.filter((p) => p !== action.playerKilled),
+                    votingState: {
+                        ...initialState.votingState,
+                    },
+                };
+            }
 
-        case 'skip-trial': {
-            return {
-                ...state,
-                status: action.status,
-                votingState: {
-                    ...initialState.votingState,
-                },
-            };
-        }
+        case 'day-start':
+            {
+                return {
+                    ...state,
+                    phase: 'day-start',
+                    dayPeriod: 'Day',
+                    dayNumber: state.dayNumber + 1,
+                    status: action.status,
+                    votingState: {
+                        ...state.votingState,
+                        timeToVote: action.timeToVote,
+                        type: 'discussion',
+                        votablePlayers: [...action.votablePlayers],
+                    },
+                };
+            }
+
+        case 'discussion-end':
+            {
+                return {
+                    ...state,
+                    phase: 'discussion-end',
+                    status: action.status,
+                    votingState: {
+                        ...initialState.votingState,
+                        type: 'trial',
+                        ...(action.votablePlayers.length && {
+                            votablePlayers: action.votablePlayers,
+                        }),
+                    },
+                };
+            }
+
+        case 'trial-start':
+            {
+                return {
+                    ...state,
+                    phase: 'trial-start',
+                    status: action.status,
+                    votingState: {
+                        ...state.votingState,
+                        timeToVote: action.timeToVote,
+                    },
+                };
+            }
+        case 'trial-end':
+            {
+                return {
+                    ...state,
+                    phase: 'trial-start',
+                    status: action.status,
+                    alivePlayers: state.alivePlayers.filter((p) => p !== action.playerKilled),
+                    votingState: {
+                        ...initialState.votingState,
+                    },
+                };
+            }
+
+        case 'game-over':
+            {
+                return {
+                    ...state,
+                    phase: 'game-over',
+                    screen: 'end',
+                    status: `${action.winningRole} wins!`,
+                    winningRole: action.winningRole,
+                    winners: [...action.winners],
+                };
+            }
+
+        case 'vote-update':
+            {
+                return {
+                    ...state,
+                    votingState: {
+                        ...state.votingState,
+                        playersWhoVoted: action.playersWhoVoted,
+                    },
+                };
+            }
+
+        case 'suspect-reveal':
+            {
+                return {
+                    ...state,
+                    checkedPlayers: [...state.checkedPlayers, action.checkedPlayer],
+                };
+            }
+
+        case 'skip-trial':
+            {
+                return {
+                    ...state,
+                    status: action.status,
+                    votingState: {
+                        ...initialState.votingState,
+                    },
+                };
+            }
 
         default:
             throw new Error(`Invalid Game State reducer action: ${action.type}`);
@@ -229,9 +242,9 @@ export default function useGameState() {
                 mafia: state.alivePlayers.filter((p) => p !== generalState.nickname),
                 detective: state.alivePlayers.filter(
                     (p) =>
-                        p !== generalState.nickname &&
-                        state.checkedPlayers &&
-                        !state.checkedPlayers.some((c) => c.nickname === p)
+                    p !== generalState.nickname &&
+                    state.checkedPlayers &&
+                    !state.checkedPlayers.some((c) => c.nickname === p)
                 ),
                 medic: state.alivePlayers,
                 civilian: [],
@@ -292,11 +305,11 @@ export default function useGameState() {
             const amIDead = !state.alivePlayers.includes(generalState.nickname);
             dispatch({
                 type: 'trial-start',
-                status: amIDead
-                    ? 'You are dead'
-                    : state.votingState.votablePlayers.length
-                    ? 'Vote for the player on trial to kill them'
-                    : 'You are on trial',
+                status: amIDead ?
+                    'You are dead' :
+                    state.votingState.votablePlayers.length ?
+                    'Vote for the player on trial to kill them' :
+                    'You are on trial',
                 timeToVote,
             });
         }
@@ -304,10 +317,9 @@ export default function useGameState() {
         function onTrialEnd({ playerKilled, isGameOver }) {
             dispatch({
                 type: 'trial-end',
-                status:
-                    playerKilled === 'abstain Vote' || !playerKilled
-                        ? `Nobody was killed in the Trial!`
-                        : `The town voted to kill ${playerKilled}!`,
+                status: playerKilled === 'noConfidence' || !playerKilled ?
+                    `Nobody was killed in the Trial!` :
+                    `The town voted to kill ${playerKilled}!`,
                 playerKilled,
             });
             if (!isGameOver) {
